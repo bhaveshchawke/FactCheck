@@ -30,7 +30,7 @@ const Result = () => {
                 alert('Please login to vote!');
                 return;
             }
-            await axios.post(`http://localhost:5000/api/fact-check/${_id}/vote`, { type }, {
+            await axios.post(`/api/fact-check/${_id}/vote`, { type }, {
                 headers: { 'x-auth-token': token }
             });
             alert('Thank you for your vote!');

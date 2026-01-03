@@ -11,7 +11,7 @@ const VerifiedNews = () => {
     useEffect(() => {
         const fetchVerified = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/fact-check/all');
+                const res = await axios.get('/api/fact-check/all');
                 // Filter news that has been verified or has high community score
                 const verified = res.data.filter(n =>
                     n.status === 'verified' || n.analysisResult?.score >= 70

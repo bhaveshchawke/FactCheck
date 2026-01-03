@@ -15,7 +15,7 @@ const Home = () => {
         // Fetch recent fact-checked news
         const fetchRecent = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/fact-check/all');
+                const res = await axios.get('/api/fact-check/all');
                 // Filter news: Score < 50 (likely fake) AND remove duplicates
                 const uniqueContent = new Set();
                 const fakeNews = res.data.filter(n => {
@@ -40,7 +40,7 @@ const Home = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5000/api/fact-check/analyze', {
+            const res = await axios.post('/api/fact-check/analyze', {
                 content: input,
                 type: inputType
             });

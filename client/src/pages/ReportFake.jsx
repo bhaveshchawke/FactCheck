@@ -15,7 +15,7 @@ const ReportFake = () => {
         setLoading(true);
         try {
             // Submit to analyze endpoint first
-            const res = await axios.post('http://localhost:5000/api/fact-check/analyze', {
+            const res = await axios.post('/api/fact-check/analyze', {
                 content,
                 type: 'text'
             });

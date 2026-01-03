@@ -13,7 +13,7 @@ const Admin = () => {
     const fetchNews = async () => {
         try {
             // In a real app, this endpoint should be protected and only return reported/pending news
-            const res = await axios.get('http://localhost:5000/api/fact-check/all');
+            const res = await axios.get('/api/fact-check/all');
             setNews(res.data);
             setLoading(false);
         } catch (err) {
@@ -29,7 +29,7 @@ const Admin = () => {
                 alert('Please login as Admin');
                 return;
             }
-            await axios.put(`http://localhost:5000/api/fact-check/${id}`, { status }, {
+            await axios.put(`/api/fact-check/${id}`, { status }, {
                 headers: { 'x-auth-token': token }
             });
             alert(`News marked as ${status}!`);
