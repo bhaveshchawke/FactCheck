@@ -62,7 +62,9 @@ const Home = () => {
             navigate('/result', { state: { result: res.data, content: input } });
         } catch (err) {
             console.error(err);
-            alert('Analysis failed. Please try again.');
+            console.error(err);
+            const errMsg = err.response?.data?.msg || err.response?.data?.error || err.message || 'Analysis failed';
+            alert(`Analysis failed: ${errMsg}`);
         } finally {
             setLoading(false);
         }
