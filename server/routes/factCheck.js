@@ -272,4 +272,44 @@ router.post('/:id/vote', auth, async (req, res) => {
     }
 });
 
+// @route   POST api/fact-check/analyze-multipart
+// @desc    Analyze uploaded image
+// @access  Public
+router.post('/analyze-multipart', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ msg: 'No image file uploaded' });
+        }
+
+        const { analyzeImage } = require('../services/aiAnalyzer');
+        console.log(`Analyzing uploaded image: ${req.file.originalname} (${req.file.size} bytes)`);
+
+        const aiResult = await analyzeImage(req.file.buffer, req.file.mimetype);
+
+        // Construct a pseudo-News item response
+        const newsItem = new News({
+            content: `[Uploaded Image Analysis]: ${req.file.originalname}`,
+            type: 'image',
+            analysisResult: {
+                score: aiResult?.trustScore || 0,
+                category: (aiResult?.trustScore < 40) ? 'Fake' : (aiResult?.trustScore >= 70) ? 'Real' : 'Doubtful',
+                breakdown: {
+                    aiScore: aiResult?.trustScore || 0,
+                    communityScore: 0,
+                    apiScore: 0
+                },
+                aiAnalysis: aiResult,
+                searchResults: []
+            },
+            status: 'pending' // Not saved to DB yet, just analyzing
+        });
+
+        res.json(newsItem);
+
+    } catch (err) {
+        console.error('Image Upload Error:', err);
+        res.status(500).send('Server upload error: ' + err.message);
+    }
+});
+
 module.exports = router;
