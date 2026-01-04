@@ -14,7 +14,7 @@ const auth = require('../middleware/auth');
 // @access  Public (or Private)
 router.post('/analyze', async (req, res) => {
     console.log('Analyze Request Received:', req.body);
-    const { content, type } = req.body;
+    let { content, type } = req.body;
 
     if (!content) {
         console.error('Content missing');
@@ -22,6 +22,20 @@ router.post('/analyze', async (req, res) => {
     }
 
     try {
+        // 0. Scrape Content if URL (NEW)
+        if (type === 'url' || content.startsWith('http')) {
+            const { scrapeMetadata } = require('../services/scraper');
+            const scrapedText = await scrapeMetadata(content);
+
+            if (scrapedText) {
+                console.log(`URL Detected. Scraped content: "${scrapedText}"`);
+                // Prefix content so AI knows it came from a link
+                content = `[Analyzed Link Content]: ${scrapedText}`;
+            } else {
+                console.log("URL scraping failed or returned empty. Using raw URL.");
+            }
+        }
+
         // 1. Initial Heuristic Analysis
         const heuristicResult = analyzeHeuristics(content, type);
         let finalScore = heuristicResult.score;
