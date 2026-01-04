@@ -13,9 +13,24 @@ const POSITIVE_KEYWORDS = [
 ];
 
 const TRUSTED_DOMAINS = [
-    'bbc.com', 'cnn.com', 'reuters.com', 'nytimes.com', 'theguardian.com', 'who.int', 'gov.in',
-    'zeebiz.com', 'ndtv.com', 'indiatoday.in', 'thehindu.com', 'timesofindia.indiatimes.com',
-    'hindustantimes.com', 'indianexpress.com', 'news18.com', 'livemint.com', 'pib.gov.in'
+    // Fact Checking Organizations
+    'altnews.in', 'boomlive.in', 'snopes.com', 'politifact.com', 'factcheck.org', 'vishvasnews.com', 'thequint.com',
+    'newsmobile.in', 'indiatoday.in/fact-check', 'thip.media', 'logicalindian.com',
+
+    // Major Indian News
+    'thehindu.com', 'indianexpress.com', 'hindustantimes.com', 'timesofindia.indiatimes.com', 'ndtv.com',
+    'livemint.com', 'economictimes.indiatimes.com', 'business-standard.com', 'newsonair.gov.in', 'pib.gov.in',
+    'ddnews.gov.in', 'ptinews.com', 'aniin.com', 'wionews.com', 'outlookindia.com', 'theweek.in',
+    'dainikbhaskar.com', 'jagran.com', 'amarujala.com', 'patrika.com', 'navbharattimes.indiatimes.com',
+
+    // Major International News
+    'bbc.com', 'reuters.com', 'apnews.com', 'afp.com', 'nytimes.com', 'washingtonpost.com', 'wsj.com',
+    'cnn.com', 'bloomberg.com', 'forbes.com', 'theguardian.com', 'aljazeera.com', 'dw.com', 'france24.com',
+    'nhk.or.jp', 'scmp.com', 'straitstimes.com', 'abc.net.au', 'cbc.ca', 'npr.org', 'pbs.org', 'usatoday.com',
+    'time.com', 'newsweek.com', 'cnbc.com', 'financialtown.com', 'investopedia.com',
+
+    // Official/Government
+    'who.int', 'un.org', 'gov.in', 'nic.in', 'rbi.org.in', 'isro.gov.in', 'nasa.gov', 'cdc.gov'
 ];
 const SUSPICIOUS_DOMAINS = ['fakenews.com', 'conspiracy.net', 'clickbait.org', 'boredpanda.com'];
 

@@ -106,12 +106,23 @@ router.post('/analyze', async (req, res) => {
 
         // 1.5. Perform Google Search (New Source Citations)
         try {
-            console.log("Optimizing search query...");
-            const optimizedQuery = await optimizeSearchQuery(content);
-            console.log(`Original: "${content}" -> Optimized: "${optimizedQuery}"`);
+            let searchContext = content;
+
+            // Only optimize if content is NOT just a raw URL (meaning scraping succeeded or it was text input)
+            // If scraping failed, 'content' is still the raw URL. Generating a query from a raw URL usually fails/hallucinates.
+            const isRawUrl = (type === 'url' || content.startsWith('http')) && !content.includes('[Analyzed Link Content]');
+
+            if (!isRawUrl) {
+                console.log("Optimizing search query...");
+                const optimizedQuery = await optimizeSearchQuery(content);
+                console.log(`Original: "${content}" -> Optimized: "${optimizedQuery}"`);
+                searchContext = optimizedQuery;
+            } else {
+                console.log("Skipping optimization for raw URL.");
+            }
 
             console.log("Fetching Source Citations...");
-            searchResults = await searchGoogle(optimizedQuery);
+            searchResults = await searchGoogle(searchContext);
             console.log(`Found ${searchResults.length} sources.`);
         } catch (searchErr) {
             console.error("Search Service Error:", searchErr);
