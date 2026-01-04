@@ -76,6 +76,32 @@ const Home = () => {
                     </p>
                 </motion.div>
 
+                {/* Instructions Section (Hindi) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl"
+                >
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-xl backdrop-blur-md">
+                        <h2 className="text-xl font-bold text-primary mb-2">🚀 TrueCheck का उपयोग कैसे करें?</h2>
+                        <ul className="text-gray-300 text-sm space-y-2 list-disc list-inside">
+                            <li>कोई भी <strong>न्यूज़, हेडलाइन, या लिंक</strong> (Instagram/YouTube) पेस्ट करें.</li>
+                            <li><strong>'Search'</strong> बटन दबाएं और जादू देखें.</li>
+                            <li>AI और Google सच और झूठ का पता लगाएंगे.</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-xl backdrop-blur-md">
+                        <h2 className="text-xl font-bold text-secondary mb-2">🔍 हम क्या चेक करते हैं?</h2>
+                        <ul className="text-gray-300 text-sm space-y-2 list-disc list-inside">
+                            <li>वायरल सोशल मीडिया दावे (Viral Claims)</li>
+                            <li>राजनीतिक बयान (Political Statements)</li>
+                            <li>फर्जी स्कीम और ऑफर (Scams)</li>
+                            <li>छेड़छाड़ की गई तस्वीरें (Fake Images)</li>
+                        </ul>
+                    </div>
+                </motion.div>
+
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-2xl">
                     <div className="flex gap-4 mb-6 justify-center">
                         <button
