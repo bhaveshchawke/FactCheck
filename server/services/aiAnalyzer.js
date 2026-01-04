@@ -77,7 +77,9 @@ const analyzeWithGemini = async (content, searchResults = []) => {
 
 const analyzeImage = async (imageBuffer, mimeType = 'image/jpeg') => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        console.log(`[DEBUG] analyzeImage called. Buffer size: ${imageBuffer.length}, Mime: ${mimeType}`);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+        console.log("[DEBUG] Model initialized: gemini-1.5-pro");
 
         const prompt = `
         You are an expert Forensic Image Analyst.
@@ -98,6 +100,7 @@ const analyzeImage = async (imageBuffer, mimeType = 'image/jpeg') => {
         }
         `;
 
+        console.log("[DEBUG] Sending request to Gemini...");
         const result = await model.generateContent([
             prompt,
             {
@@ -107,6 +110,7 @@ const analyzeImage = async (imageBuffer, mimeType = 'image/jpeg') => {
                 }
             }
         ]);
+        console.log("[DEBUG] Gemini response received");
 
         const response = await result.response;
         const text = response.text();
