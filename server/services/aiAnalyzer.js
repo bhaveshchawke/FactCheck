@@ -2,6 +2,29 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+const optimizeSearchQuery = async (originalQuery) => {
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const prompt = `
+        You are a Search Engine Optimization expert.
+        Convert the following user input (which might be in Hindi, Hinglish, or any other language) into the single best ENGLISH Google Search query to find factual news reports about the event.
+        
+        Rules:
+        1. Keep it concise (5-10 words).
+        2. Focus on keywords (entities, actions, dates).
+        3. Remove conversational filler ("is this true", "report says").
+        4. Return ONLY the search query string, no quotes.
+
+        User Input: "${originalQuery}"
+        `;
+        const result = await model.generateContent(prompt);
+        return result.response.text().trim();
+    } catch (error) {
+        console.error("Query Optimization Error:", error);
+        return originalQuery; // Fallback to original
+    }
+};
+
 const analyzeWithGemini = async (content, searchResults = []) => {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
@@ -26,8 +49,13 @@ const analyzeWithGemini = async (content, searchResults = []) => {
       Provide a JSON response with the following fields:
       1. "fallacies": A list of logical fallacies or manipulative tactics used (e.g., Ad Hominem, Straw Man, Fear Mongering). If none, return an empty list.
       2. "bias": Determine the political or emotional bias (e.g., Left-leaning, Right-leaning, Neutral, Sensationalist).
-      3. "trustScore": A score from 0 to 100 based on the credibility of the writing style and claims (independent of external search).
-      4. "summary": A brief one-sentence verification summary.
+      3. "trustScore": A score from 0 (Fake) to 100 (Verified) based on the claims and the provided search results.
+      4. "summary": A brief one-sentence verification summary. Use the provided search results as the primary source of truth for recent events.
+
+      IMPORTANT:
+      - If the Search Results confirm the claim, trustScore should be high (80-100).
+      - If Search Results debunk it, trustScore should be low.
+      - Pay attention to the Current Date. Events in the future relative to typical training data might be real if confirmed by Search Results (Breaking News).
 
       Format the output strictly as valid JSON.
     `;
@@ -46,4 +74,4 @@ const analyzeWithGemini = async (content, searchResults = []) => {
     }
 };
 
-module.exports = { analyzeWithGemini };
+module.exports = { analyzeWithGemini, optimizeSearchQuery };

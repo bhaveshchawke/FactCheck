@@ -36,14 +36,8 @@ router.post('/analyze', async (req, res) => {
         let aiAnalysis = null;
         let searchResults = [];
 
-        // 1.5. Perform Google Search (New Source Citations)
-        try {
-            console.log("Fetching Source Citations...");
-            searchResults = await searchGoogle(content);
-            console.log(`Found ${searchResults.length} sources.`);
-        } catch (searchErr) {
-            console.error("Search Service Error:", searchErr);
-        }
+        // 1.5. Google Search moved to after optimizer import
+
 
         // 2. Google Fact Check API
         const apiKey = process.env.GOOGLE_FACT_CHECK_API_KEY;
@@ -94,7 +88,21 @@ router.post('/analyze', async (req, res) => {
         }
 
         // 3. AI Deep Logic Analysis (NEW)
-        const { analyzeWithGemini } = require('../services/aiAnalyzer');
+        const { analyzeWithGemini, optimizeSearchQuery } = require('../services/aiAnalyzer');
+
+        // 1.5. Perform Google Search (New Source Citations)
+        try {
+            console.log("Optimizing search query...");
+            const optimizedQuery = await optimizeSearchQuery(content);
+            console.log(`Original: "${content}" -> Optimized: "${optimizedQuery}"`);
+
+            console.log("Fetching Source Citations...");
+            searchResults = await searchGoogle(optimizedQuery);
+            console.log(`Found ${searchResults.length} sources.`);
+        } catch (searchErr) {
+            console.error("Search Service Error:", searchErr);
+        }
+
         console.log("Starting AI Analysis...");
         const aiResult = await analyzeWithGemini(content, searchResults);
 
