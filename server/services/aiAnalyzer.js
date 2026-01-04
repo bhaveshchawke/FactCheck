@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const optimizeSearchQuery = async (originalQuery) => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
         const prompt = `
         You are a Search Engine Optimization expert.
         Convert the following user input (which might be in Hindi, Hinglish, or any other language) into the single best ENGLISH Google Search query to find factual news reports about the event.
