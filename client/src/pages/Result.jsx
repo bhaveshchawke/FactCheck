@@ -104,6 +104,12 @@ const Result = () => {
                                         </div>
                                         <div>
                                             <p className="text-sm text-gray-300 mb-1"><span className="text-purple-300 font-medium">Bias:</span> {aiAnalysis.bias}</p>
+                                            {aiAnalysis.reasoning && (
+                                                <div className="mb-3 p-3 bg-purple-500/10 rounded-lg border-l-2 border-purple-500">
+                                                    <p className="text-xs text-purple-200 uppercase font-bold mb-1">Analysis Logic</p>
+                                                    <p className="text-sm text-gray-300 leading-relaxed">{aiAnalysis.reasoning}</p>
+                                                </div>
+                                            )}
                                             <p className="text-sm text-gray-400 italic">"{aiAnalysis.summary}"</p>
                                         </div>
                                         {aiAnalysis.fallacies && aiAnalysis.fallacies.length > 0 && (

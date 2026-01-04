@@ -117,22 +117,22 @@ const Home = () => {
                 </motion.div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-2xl">
-                    <div className="flex gap-4 mb-6 relative z-10">
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 relative z-10 w-full">
                         <button
                             onClick={() => setInputType('text')}
-                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'text' ? 'bg-primary text-black font-bold shadow-lg shadow-primary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                            className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-full transition-all duration-300 ${inputType === 'text' ? 'bg-primary text-black font-bold shadow-lg shadow-primary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
                         >
                             Text/News
                         </button>
                         <button
                             onClick={() => setInputType('url')}
-                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'url' ? 'bg-secondary text-black font-bold shadow-lg shadow-secondary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                            className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-full transition-all duration-300 ${inputType === 'url' ? 'bg-secondary text-black font-bold shadow-lg shadow-secondary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
                         >
                             Link/URL
                         </button>
                         <button
                             onClick={() => setInputType('image')}
-                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'image' ? 'bg-accent text-white font-bold shadow-lg shadow-accent/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                            className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-full transition-all duration-300 ${inputType === 'image' ? 'bg-accent text-white font-bold shadow-lg shadow-accent/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
                         >
                             Image Check 🖼️
                         </button>
