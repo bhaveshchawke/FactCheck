@@ -102,34 +102,42 @@ router.post('/analyze', async (req, res) => {
         }
 
         // 3. AI Deep Logic Analysis (NEW)
-        const { analyzeWithGemini, optimizeSearchQuery } = require('../services/aiAnalyzer');
+        const { analyzeWithGemini, optimizeSearchQuery, analyzeImage } = require('../services/aiAnalyzer');
 
-        // 1.5. Perform Google Search (New Source Citations)
-        try {
-            let searchContext = content;
+        let aiResult = null;
 
-            // Only optimize if content is NOT just a raw URL (meaning scraping succeeded or it was text input)
-            // If scraping failed, 'content' is still the raw URL. Generating a query from a raw URL usually fails/hallucinates.
-            const isRawUrl = (type === 'url' || content.startsWith('http')) && !content.includes('[Analyzed Link Content]');
+        if (type === 'image') {
+            console.log("Starting AI Image Analysis...");
+            aiResult = await analyzeImage(content);
+        } else {
+            // Existing Text/URL Flow
+            // 1.5. Perform Google Search (New Source Citations)
+            try {
+                let searchContext = content;
 
-            if (!isRawUrl) {
-                console.log("Optimizing search query...");
-                const optimizedQuery = await optimizeSearchQuery(content);
-                console.log(`Original: "${content}" -> Optimized: "${optimizedQuery}"`);
-                searchContext = optimizedQuery;
-            } else {
-                console.log("Skipping optimization for raw URL.");
+                // Only optimize if content is NOT just a raw URL (meaning scraping succeeded or it was text input)
+                // If scraping failed, 'content' is still the raw URL. Generating a query from a raw URL usually fails/hallucinates.
+                const isRawUrl = (type === 'url' || content.startsWith('http')) && !content.includes('[Analyzed Link Content]');
+
+                if (!isRawUrl) {
+                    console.log("Optimizing search query...");
+                    const optimizedQuery = await optimizeSearchQuery(content);
+                    console.log(`Original: "${content}" -> Optimized: "${optimizedQuery}"`);
+                    searchContext = optimizedQuery;
+                } else {
+                    console.log("Skipping optimization for raw URL.");
+                }
+
+                console.log("Fetching Source Citations...");
+                searchResults = await searchGoogle(searchContext);
+                console.log(`Found ${searchResults.length} sources.`);
+            } catch (searchErr) {
+                console.error("Search Service Error:", searchErr);
             }
 
-            console.log("Fetching Source Citations...");
-            searchResults = await searchGoogle(searchContext);
-            console.log(`Found ${searchResults.length} sources.`);
-        } catch (searchErr) {
-            console.error("Search Service Error:", searchErr);
+            console.log("Starting AI Analysis...");
+            aiResult = await analyzeWithGemini(content, searchResults);
         }
-
-        console.log("Starting AI Analysis...");
-        const aiResult = await analyzeWithGemini(content, searchResults);
 
         if (aiResult) {
             console.log("AI Analysis Complete:", aiResult);

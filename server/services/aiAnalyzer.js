@@ -1,5 +1,5 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+const axios = require('axios');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const optimizeSearchQuery = async (originalQuery) => {
@@ -74,4 +74,52 @@ const analyzeWithGemini = async (content, searchResults = []) => {
     }
 };
 
-module.exports = { analyzeWithGemini, optimizeSearchQuery };
+const analyzeImage = async (imageUrl) => {
+    try {
+        // 1. Fetch Image as Buffer
+        const imageResp = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+        const imageBuffer = Buffer.from(imageResp.data, 'binary').toString('base64');
+
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const prompt = `
+        You are an expert Forensic Image Analyst.
+        Analyze this image for signs of AI generation or deepfake manipulation.
+        Look for:
+        - Asymmetrical features (eyes, teeth, hands)
+        - Unnatural textures (smooth plastic skin, blurred backgrounds)
+        - Glitched text or nonsense patterns
+        - Lighting inconsistencies
+
+        Respond with valid JSON:
+        {
+            "isAiGenerated": boolean,
+            "confidence": number (0-100),
+            "summary": "Short explanation of your findings",
+            "fallacies": ["List visual anomalies found", "e.g. Extra fingers"],
+            "trustScore": number (0 = Definitely Fake, 100 = Real Photo)
+        }
+        `;
+
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: imageBuffer,
+                    mimeType: imageResp.headers['content-type'] || 'image/jpeg'
+                }
+            }
+        ]);
+
+        const response = await result.response;
+        const text = response.text();
+        const cleanText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+        return JSON.parse(cleanText);
+
+    } catch (error) {
+        console.error("Image Analysis Error:", error.message);
+        return null;
+    }
+};
+
+module.exports = { analyzeWithGemini, optimizeSearchQuery, analyzeImage };

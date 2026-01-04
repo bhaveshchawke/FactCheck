@@ -97,43 +97,60 @@ const Home = () => {
                             <li>वायरल सोशल मीडिया दावे (Viral Claims)</li>
                             <li>राजनीतिक बयान (Political Statements)</li>
                             <li>फर्जी स्कीम और ऑफर (Scams)</li>
-                            <li>छेड़छाड़ की गई तस्वीरें (Fake Images)</li>
+                            <li>🤖 <strong>AI द्वारा बनाई गई तस्वीरें (Deepfakes)</strong> [New]</li>
                         </ul>
                     </div>
                 </motion.div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-2xl">
-                    <div className="flex gap-4 mb-6 justify-center">
+                    <div className="flex gap-4 mb-6 relative z-10">
                         <button
                             onClick={() => setInputType('text')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${inputType === 'text' ? 'bg-primary text-white shadow-lg shadow-primary/25' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'text' ? 'bg-primary text-black font-bold shadow-lg shadow-primary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
                         >
-                            <Type className="h-4 w-4" /> Text
+                            Text/News
                         </button>
                         <button
                             onClick={() => setInputType('url')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${inputType === 'url' ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'url' ? 'bg-secondary text-black font-bold shadow-lg shadow-secondary/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
                         >
-                            <LinkIcon className="h-4 w-4" /> URL
+                            Link/URL
+                        </button>
+                        <button
+                            onClick={() => setInputType('image')}
+                            className={`px-4 py-2 rounded-full transition-all duration-300 ${inputType === 'image' ? 'bg-accent text-white font-bold shadow-lg shadow-accent/50' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                        >
+                            Image Check 🖼️
                         </button>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="relative">
-                        <input
-                            type={inputType === 'url' ? 'url' : 'text'}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder={inputType === 'url' ? "Paste Article URL..." : "Paste News Content or Headline..."}
-                            className="w-full bg-darker/50 border border-white/10 rounded-xl py-4 pl-6 pr-14 text-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-gray-600"
-                            required
-                        />
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="absolute right-2 top-2 bottom-2 bg-primary hover:bg-primary/90 text-white p-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? <div className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full" /> : <Search className="h-5 w-5" />}
-                        </button>
+                    <form onSubmit={handleSubmit} className="w-full relative z-10">
+                        <div className="relative group">
+                            <textarea
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder={
+                                    inputType === 'text' ? "Enter news text here..." :
+                                        inputType === 'url' ? "Paste URL here (News Source, Instagram Reel, YouTube)..." :
+                                            "Paste Image Address (URL) here..."
+                                }
+                                className="w-full h-40 bg-black/40 text-white p-4 rounded-xl border border-white/20 focus:border-primary focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 resize-none backdrop-blur-sm"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                disabled={loading || !input}
+                                className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            >
+                                {loading ? (
+                                    <span className="animate-spin">⌛</span>
+                                ) : (
+                                    <>
+                                        Search <ArrowRight className="h-4 w-4" />
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </form>
                 </div>
 
