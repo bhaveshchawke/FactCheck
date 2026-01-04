@@ -74,12 +74,8 @@ const analyzeWithGemini = async (content, searchResults = []) => {
     }
 };
 
-const analyzeImage = async (imageUrl) => {
+const analyzeImage = async (imageBuffer, mimeType = 'image/jpeg') => {
     try {
-        // 1. Fetch Image as Buffer
-        const imageResp = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-        const imageBuffer = Buffer.from(imageResp.data, 'binary').toString('base64');
-
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
@@ -105,8 +101,8 @@ const analyzeImage = async (imageUrl) => {
             prompt,
             {
                 inlineData: {
-                    data: imageBuffer,
-                    mimeType: imageResp.headers['content-type'] || 'image/jpeg'
+                    data: imageBuffer.toString('base64'),
+                    mimeType: mimeType
                 }
             }
         ]);

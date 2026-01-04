@@ -5,6 +5,13 @@ const News = require('../models/News');
 const { analyzeHeuristics, extractKeywords } = require('../utils/analyzer');
 const { searchGoogle } = require('../services/googleSearch');
 const auth = require('../middleware/auth');
+const multer = require('multer');
+
+// Configure Multer for memory storage
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
 // @route   POST api/fact-check/analyze
 // @desc    Analyze news content

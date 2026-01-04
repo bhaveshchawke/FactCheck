@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 
 const Home = () => {
     const [input, setInput] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null); // New State
+    const [imagePreview, setImagePreview] = useState(null); // Preview
     const [inputType, setInputType] = useState('text');
     const [loading, setLoading] = useState(false);
     const [recentNews, setRecentNews] = useState([]);
@@ -40,10 +42,22 @@ const Home = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post('/api/fact-check/analyze', {
-                content: input,
-                type: inputType
-            });
+            let res;
+            if (inputType === 'image' && selectedFile) {
+                // Handle Multipart Upload
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+
+                res = await axios.post('/api/fact-check/analyze-multipart', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            } else {
+                // Existing Text/URL logic
+                res = await axios.post('/api/fact-check/analyze', {
+                    content: input,
+                    type: inputType
+                });
+            }
             // Navigate to result with data
             navigate('/result', { state: { result: res.data, content: input } });
         } catch (err) {
@@ -126,31 +140,60 @@ const Home = () => {
 
                     <form onSubmit={handleSubmit} className="w-full relative z-10">
                         <div className="relative group">
-                            <textarea
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                placeholder={
-                                    inputType === 'text' ? "Enter news text here..." :
-                                        inputType === 'url' ? "Paste URL here (News Source, Instagram Reel, YouTube)..." :
-                                            "Paste Image Address (URL) here..."
-                                }
-                                className="w-full h-40 bg-black/40 text-white p-4 rounded-xl border border-white/20 focus:border-primary focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 resize-none backdrop-blur-sm"
-                                required
-                            />
-                            <button
-                                type="submit"
-                                disabled={loading || !input}
-                                className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                            >
-                                {loading ? (
-                                    <span className="animate-spin">⌛</span>
+                            <div className="relative group">
+                                {inputType === 'image' ? (
+                                    <div className="w-full h-64 bg-black/40 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group-hover:border-primary/50 transition-colors">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file) {
+                                                    setSelectedFile(file);
+                                                    setImagePreview(URL.createObjectURL(file));
+                                                    setInput(file.name); // Just to satisfy disabled check
+                                                }
+                                            }}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        />
+                                        {imagePreview ? (
+                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-2" />
+                                        ) : (
+                                            <div className="text-center text-gray-400">
+                                                <div className="bg-white/10 p-3 rounded-full inline-block mb-2">
+                                                    <Sparkles className="h-6 w-6 text-accent" />
+                                                </div>
+                                                <p className="font-semibold">Click to Upload Image</p>
+                                                <p className="text-xs mt-1">Supports JPG, PNG (Max 5MB)</p>
+                                            </div>
+                                        )}
+                                    </div>
                                 ) : (
-                                    <>
-                                        Search <ArrowRight className="h-4 w-4" />
-                                    </>
+                                    <textarea
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        placeholder={
+                                            inputType === 'text' ? "Enter news text here..." :
+                                                "Paste URL here (News Source, Instagram Reel, YouTube)..."
+                                        }
+                                        className="w-full h-40 bg-black/40 text-white p-4 rounded-xl border border-white/20 focus:border-primary focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 resize-none backdrop-blur-sm"
+                                        required={inputType !== 'image'}
+                                    />
                                 )}
-                            </button>
-                        </div>
+                                <button
+                                    type="submit"
+                                    disabled={loading || !input}
+                                    className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {loading ? (
+                                        <span className="animate-spin">⌛</span>
+                                    ) : (
+                                        <>
+                                            Search <ArrowRight className="h-4 w-4" />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
                     </form>
                 </div>
 
