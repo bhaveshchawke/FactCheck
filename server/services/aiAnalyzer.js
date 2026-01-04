@@ -1,5 +1,6 @@
 
 const axios = require('axios');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const optimizeSearchQuery = async (originalQuery) => {
