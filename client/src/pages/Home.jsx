@@ -182,7 +182,7 @@ const Home = () => {
                             <button
                                 type="submit"
                                 disabled={loading || !input}
-                                className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 z-20"
                             >
                                 {loading ? (
                                     <span className="animate-spin">⌛</span>
