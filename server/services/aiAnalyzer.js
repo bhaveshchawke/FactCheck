@@ -78,8 +78,8 @@ const analyzeWithGemini = async (content, searchResults = []) => {
 const analyzeImage = async (imageBuffer, mimeType = 'image/jpeg') => {
     try {
         console.log(`[DEBUG] analyzeImage called. Buffer size: ${imageBuffer.length}, Mime: ${mimeType}`);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-        console.log("[DEBUG] Model initialized: gemini-1.5-pro");
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        console.log("[DEBUG] Model initialized: gemini-3-flash-preview");
 
         const prompt = `
         You are an expert Forensic Image Analyst.
