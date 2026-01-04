@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Search, Link as LinkIcon, Type, AlertCircle, Sparkles } from 'lucide-react';
+import { Search, Link as LinkIcon, Type, AlertCircle, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Home = () => {
