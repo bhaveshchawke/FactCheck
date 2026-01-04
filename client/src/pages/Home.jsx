@@ -140,60 +140,59 @@ const Home = () => {
 
                     <form onSubmit={handleSubmit} className="w-full relative z-10">
                         <div className="relative group">
-                            <div className="relative group">
-                                {inputType === 'image' ? (
-                                    <div className="w-full h-64 bg-black/40 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group-hover:border-primary/50 transition-colors">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                const file = e.target.files[0];
-                                                if (file) {
-                                                    setSelectedFile(file);
-                                                    setImagePreview(URL.createObjectURL(file));
-                                                    setInput(file.name); // Just to satisfy disabled check
-                                                }
-                                            }}
-                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                        />
-                                        {imagePreview ? (
-                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-2" />
-                                        ) : (
-                                            <div className="text-center text-gray-400">
-                                                <div className="bg-white/10 p-3 rounded-full inline-block mb-2">
-                                                    <Sparkles className="h-6 w-6 text-accent" />
-                                                </div>
-                                                <p className="font-semibold">Click to Upload Image</p>
-                                                <p className="text-xs mt-1">Supports JPG, PNG (Max 5MB)</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <textarea
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        placeholder={
-                                            inputType === 'text' ? "Enter news text here..." :
-                                                "Paste URL here (News Source, Instagram Reel, YouTube)..."
-                                        }
-                                        className="w-full h-40 bg-black/40 text-white p-4 rounded-xl border border-white/20 focus:border-primary focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 resize-none backdrop-blur-sm"
-                                        required={inputType !== 'image'}
+                            {inputType === 'image' ? (
+                                <div className="w-full h-64 bg-black/40 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group-hover:border-primary/50 transition-colors">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setSelectedFile(file);
+                                                setImagePreview(URL.createObjectURL(file));
+                                                setInput(file.name); // Just to satisfy disabled check
+                                            }
+                                        }}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     />
-                                )}
-                                <button
-                                    type="submit"
-                                    disabled={loading || !input}
-                                    className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                                >
-                                    {loading ? (
-                                        <span className="animate-spin">⌛</span>
+                                    {imagePreview ? (
+                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-2" />
                                     ) : (
-                                        <>
-                                            Search <ArrowRight className="h-4 w-4" />
-                                        </>
+                                        <div className="text-center text-gray-400">
+                                            <div className="bg-white/10 p-3 rounded-full inline-block mb-2">
+                                                <Sparkles className="h-6 w-6 text-accent" />
+                                            </div>
+                                            <p className="font-semibold">Click to Upload Image</p>
+                                            <p className="text-xs mt-1">Supports JPG, PNG (Max 5MB)</p>
+                                        </div>
                                     )}
-                                </button>
-                            </div>
+                                </div>
+                            ) : (
+                                <textarea
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    placeholder={
+                                        inputType === 'text' ? "Enter news text here..." :
+                                            "Paste URL here (News Source, Instagram Reel, YouTube)..."
+                                    }
+                                    className="w-full h-40 bg-black/40 text-white p-4 rounded-xl border border-white/20 focus:border-primary focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 resize-none backdrop-blur-sm"
+                                    required={inputType !== 'image'}
+                                />
+                            )}
+                            <button
+                                type="submit"
+                                disabled={loading || !input}
+                                className="absolute right-4 bottom-4 bg-primary hover:bg-primary/90 text-black px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            >
+                                {loading ? (
+                                    <span className="animate-spin">⌛</span>
+                                ) : (
+                                    <>
+                                        Search <ArrowRight className="h-4 w-4" />
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </form>
                 </div>
 
