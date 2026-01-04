@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { Search, Link as LinkIcon, Type, AlertCircle, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -17,7 +17,7 @@ const Home = () => {
         // Fetch recent fact-checked news
         const fetchRecent = async () => {
             try {
-                const res = await axios.get('/api/fact-check/all');
+                const res = await api.get('/api/fact-check/all');
                 // Filter news: Score < 50 (likely fake) AND remove duplicates
                 const uniqueContent = new Set();
                 const fakeNews = res.data.filter(n => {
@@ -48,12 +48,12 @@ const Home = () => {
                 const formData = new FormData();
                 formData.append('image', selectedFile);
 
-                res = await axios.post('/api/fact-check/analyze-multipart', formData, {
+                res = await api.post('/api/fact-check/analyze-multipart', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             } else {
                 // Existing Text/URL logic
-                res = await axios.post('/api/fact-check/analyze', {
+                res = await api.post('/api/fact-check/analyze', {
                     content: input,
                     type: inputType
                 });

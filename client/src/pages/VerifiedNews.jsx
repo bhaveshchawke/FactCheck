@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { CheckCircle, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ const VerifiedNews = () => {
     useEffect(() => {
         const fetchVerified = async () => {
             try {
-                const res = await axios.get('/api/fact-check/all');
+                const res = await api.get('/api/fact-check/all');
                 // Filter news that has been verified or has high community score
                 const verified = res.data.filter(n =>
                     n.status === 'verified' || n.analysisResult?.score >= 70

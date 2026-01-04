@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Flag, Send, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const ReportFake = () => {
         setLoading(true);
         try {
             // Submit to analyze endpoint first
-            const res = await axios.post('/api/fact-check/analyze', {
+            const res = await api.post('/api/fact-check/analyze', {
                 content,
                 type: 'text'
             });

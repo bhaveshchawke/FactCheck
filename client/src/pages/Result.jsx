@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import ScoreMeter from '../components/ScoreMeter';
 import TrustGraph from '../components/TrustGraph';
@@ -30,7 +30,7 @@ const Result = () => {
                 alert('Please login to vote!');
                 return;
             }
-            await axios.post(`/api/fact-check/${_id}/vote`, { type }, {
+            await api.post(`/api/fact-check/${_id}/vote`, { type }, {
                 headers: { 'x-auth-token': token }
             });
             alert('Thank you for your vote!');

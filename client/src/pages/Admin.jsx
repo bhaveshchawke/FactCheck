@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Check, X, Trash2 } from 'lucide-react';
 
 const Admin = () => {
@@ -13,7 +13,7 @@ const Admin = () => {
     const fetchNews = async () => {
         try {
             // In a real app, this endpoint should be protected and only return reported/pending news
-            const res = await axios.get('/api/fact-check/all');
+            const res = await api.get('/api/fact-check/all');
             setNews(res.data);
             setLoading(false);
         } catch (err) {
@@ -29,7 +29,7 @@ const Admin = () => {
                 alert('Please login as Admin');
                 return;
             }
-            await axios.put(`/api/fact-check/${id}`, { status }, {
+            await api.put(`/api/fact-check/${id}`, { status }, {
                 headers: { 'x-auth-token': token }
             });
             alert(`News marked as ${status}!`);

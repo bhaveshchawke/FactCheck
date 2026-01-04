@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 
@@ -13,7 +13,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/auth/register', { username, email, password, secretCode });
+            await api.post('/api/auth/register', { username, email, password, secretCode });
             navigate('/login');
         } catch (err) {
             console.error(err);
